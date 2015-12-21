@@ -1,0 +1,30 @@
+{
+  "name": "casbot2016",
+  "version": "0.1.0",
+  "description": "A botkit-powered Slackbot",
+  "main": "bot.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/audibleblink/casbot2016.git"
+  },
+  "keywords": [
+    "botkit",
+    "slack",
+    "slackbot",
+    "node",
+    "reddit",
+    "casual"
+  ],
+  "author": "audibleblink",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/audibleblink/casbot2016/issues"
+  },
+  "homepage": "https://github.com/audibleblink/casbot2016#readme",
+  "dependencies": {
+    "botkit": "0.0.4"
+  }
+}
