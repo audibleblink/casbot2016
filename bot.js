@@ -1,6 +1,9 @@
-const Botkit = require('botkit')
+"use strict"
+
+const Botkit      = require('botkit')
 const imageSearch = require('./lib/image_search')
-const urban = require('./lib/urban')
+const urban       = require('./lib/urban')
+const XBL         = require("./lib/live")
 
 const controller = Botkit.slackbot({
   debug: true
@@ -10,11 +13,6 @@ controller.spawn({
   token: process.env.SLACK_TOKEN
 }).startRTM()
 
-
-
-controller.hears('hello', 'direct_message,direct_mention,mention', (bot, message) => {
-  bot.reply(message, 'Hello yourself.')
-})
 
 // image search
 controller.hears('!img', 'ambient', (bot, message) => {
