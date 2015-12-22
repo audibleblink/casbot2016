@@ -16,7 +16,7 @@ controller.spawn({
 
 // image search
 controller.hears('!img', 'ambient', (bot, message) => {
-  const query = message.text.replace(/^!img\W/, '')
+  const query = stripKeyword(message)
   imageSearch(query)
     .then((link) => bot.reply(message, link))
     .catch((err) => bot.reply(message, err))
@@ -24,7 +24,7 @@ controller.hears('!img', 'ambient', (bot, message) => {
 
 // urban dictionary search
 controller.hears('!urban', 'ambient', (bot, message) => {
-  const query = message.text.replace(/^!urban\W/, '')
+  const query = stripKeyword(message)
   urban(query)
     .then((link) => bot.reply(message, link))
     .catch((err) => bot.reply(message, err))
@@ -37,10 +37,16 @@ controller.hears('!ping', 'ambient', (bot, message) => {
 
 // xbox live status checker
 controller.hears('!live', 'ambient', (bot, message) => {
-  const gamertag = message.text.replace(/^!live\W/, '')
+  const gamertag = stripKeyword(message)
   XBL.getXuid(gamertag)
       .then(XBL.getPresence)
       .then((presence) => XBL.prepareResponse(presence, gamertag))
       .then((response) => bot.reply(message, response))
       .catch((err) => bot.reply(message, new Error(err)))
 })
+
+
+
+const stripKeyword = (message) => {
+  return message.text.replace(/!.*\W/, '')
+}
