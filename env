@@ -1,0 +1,11 @@
+export NODE_ENV=
+
+# Needed for the image/gif search
+export GOOGLE_CX=
+export GOOGLE_TOKEN=
+
+# your token from xboxapi.com. Used for the !live command
+export XBOX_API=
+
+# Slack Bot token. 
+export SLACK_TOKEN=
