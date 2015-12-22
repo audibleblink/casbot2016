@@ -4,7 +4,8 @@
   "description": "A botkit-powered Slackbot",
   "main": "bot.js",
   "scripts": {
-    "test": "npm test"
+    "test": "npm test",
+    "start": "node bot.js"
   },
   "repository": {
     "type": "git",
