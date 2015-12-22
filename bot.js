@@ -6,7 +6,8 @@ const urban       = require('./lib/urban')
 const XBL         = require("./lib/live")
 
 const controller = Botkit.slackbot({
-  debug: !!process.env.NODE_ENV === "production"
+  debug: !!process.env.NODE_ENV === "production",
+  json_file_store: "./db.json"
 })
 
 controller.spawn({
