@@ -24,8 +24,8 @@ controller.setupWebserver(5000, (err,express_webserver) => {
 // controller.storage.teams.save({id: "T03E23VAN", team_domain: "redditcasual"})
 //
 // controller.on('slash_command', (bot,message) => {
-//   // bot.replyPublic(message,'Everyone can see this part of the slash command');
-//   bot.replyPrivate(message,'Only the person who used the slash command can see this.');
+//   // bot.replyPublic(message,'Everyone can see this part of the slash command')
+//   bot.replyPrivate(message,'Only the person who used the slash command can see this.')
 // })
 
 // image search
@@ -46,7 +46,7 @@ controller.hears('!urban', 'ambient', (bot, message) => {
 
 // used for checking status
 controller.hears('!ping', 'ambient', (bot, message) => {
-  bot.reply(message, "Pong!")
+  bot.reply(message, `Pong!\n\`Uptime: ${parsedUptime(process.uptime())}\``)
 })
 
 // xbox live status checker
@@ -67,4 +67,14 @@ controller.hears('!live', 'ambient', (bot, message) => {
 
 const stripKeyword = (message) => {
   return message.text.replace(/!.*\W/, '')
+}
+
+const parsedUptime = (totalSeconds) => {
+  const days    = Math.floor(totalSeconds / 86400)
+  totalSeconds %= 86400
+  const hours   = Math.floor(totalSeconds / 3600)
+  totalSeconds %= 3600
+  const minutes = Math.floor(totalSeconds / 60)
+  const seconds = Math.floor(totalSeconds % 60)
+  return `${days} days, ${hours} hours ${minutes} minutes ${seconds} seconds`
 }
