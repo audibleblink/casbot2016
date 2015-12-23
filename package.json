@@ -5,7 +5,7 @@
   "main": "bot.js",
   "scripts": {
     "test": "npm test",
-    "start": "node bot.js"
+    "start": "node --harmony_destructuring bot.js"
   },
   "repository": {
     "type": "git",

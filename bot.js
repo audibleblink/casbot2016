@@ -1,9 +1,9 @@
 "use strict"
 
 const Botkit      = require('botkit')
-const imageSearch = require('./lib/image_search')
-const urban       = require('./lib/urban')
-const XBL         = require("./lib/live")
+const { parsedUptime, stripKeyword } = require('./lib/bot_tools')
+const { imageSearch, urban, XBL }    = require('./lib/bot_plugins')
+
 
 const controller = Botkit.slackbot({
   debug: process.env.NODE_ENV === "development",
@@ -18,15 +18,6 @@ controller.setupWebserver(5000, (err,express_webserver) => {
   controller.createWebhookEndpoints(express_webserver)
 })
 
-// // TODO: botkit is currently broken and needs this to implement slash commands
-// // I've submitted a PR and will uncomment and merge once they accept
-
-// controller.storage.teams.save({id: "T03E23VAN", team_domain: "redditcasual"})
-//
-// controller.on('slash_command', (bot,message) => {
-//   // bot.replyPublic(message,'Everyone can see this part of the slash command')
-//   bot.replyPrivate(message,'Only the person who used the slash command can see this.')
-// })
 
 // image search
 controller.hears('!img', 'ambient', (bot, message) => {
@@ -58,23 +49,3 @@ controller.hears('!live', 'ambient', (bot, message) => {
       .then((response) => bot.reply(message, response))
       .catch((err) => bot.reply(message, new Error(err)))
 })
-
-// TODO: implemet sane logging functionality
-// controller.hears(".*", 'ambient', (bot, message) => {
-//   controller.storage.channels.save(message)
-// })
-
-
-const stripKeyword = (message) => {
-  return message.text.replace(/!.*\W/, '')
-}
-
-const parsedUptime = (totalSeconds) => {
-  const days    = Math.floor(totalSeconds / 86400)
-  totalSeconds %= 86400
-  const hours   = Math.floor(totalSeconds / 3600)
-  totalSeconds %= 3600
-  const minutes = Math.floor(totalSeconds / 60)
-  const seconds = Math.floor(totalSeconds % 60)
-  return `${days} days, ${hours} hours ${minutes} minutes ${seconds} seconds`
-}
