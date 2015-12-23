@@ -24,19 +24,22 @@ From Slack
 
 This bot needs a few environment variables to run correctly. Check out the `env` file for a template and descriptions.
 
-Either clone this directory and run it with `npm start` or if you have Docker installed:
+Either clone this directory and run it with `npm start` or if you have Docker installed, ensure you have a populated `.env` file and run:
 
 ```sh
-docker run -d -P --name casbot \
-  -e XBOX_API=$XBOX_API \
-  -e SLACK_TOKEN=$SLACK_TOKEN \
-  -e GOOGLE_CX=$GOOGLE_CX \
-  -e GOOGLE_TOKEN=$GOOGLE_TOKEN \
-  audibleblink/casbot2016:develop
+docker-compose build casbot-dev
+docker-compose up casbot-dev
 ```
 
 Run `docker ps` to see the exposed port number.
 
 ## Deployment
  The bot currently lives on a Digital Ocean droplet and is deployed with Docker using a similar command to the one above.
+ 
+ On the droplet, ensure the `.env` is present and populated, then:
+ 
+ ```sh
+ docker-compose build casbot-prod
+ docker-compose up casbot-prod
+ ```
  

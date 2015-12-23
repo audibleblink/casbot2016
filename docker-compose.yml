@@ -1,0 +1,17 @@
+casbot-dev:
+  build: .
+  ports:
+    - "5000:5000"
+  environment:
+    - NODE_ENV development 
+  env_file: .env
+
+
+casbot-prod:
+  image: audibleblink/casbot:latest
+  restart: always
+  ports:
+    - "5000:5000"
+  environment:
+    - NODE_ENV production
+  env_file: .env

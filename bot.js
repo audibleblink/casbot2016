@@ -6,7 +6,7 @@ const urban       = require('./lib/urban')
 const XBL         = require("./lib/live")
 
 const controller = Botkit.slackbot({
-  debug: !!process.env.NODE_ENV === "production",
+  debug: process.env.NODE_ENV === "development",
   json_file_store: "./db.json"
 })
 
@@ -27,7 +27,6 @@ controller.setupWebserver(5000, (err,express_webserver) => {
 //   // bot.replyPublic(message,'Everyone can see this part of the slash command');
 //   bot.replyPrivate(message,'Only the person who used the slash command can see this.');
 // })
-
 
 // image search
 controller.hears('!img', 'ambient', (bot, message) => {
