@@ -8,7 +8,8 @@ const { imageSearch, urban, XBL }    = require('./lib/bot_plugins')
 
 const controller = Botkit.slackbot({
   debug: process.env.NODE_ENV === "development",
-  storage: new redisStore()
+  // 'redis' is a hostname set in /etc/hosts by Docker
+  storage: new redisStore({host: "redis"}) 
 })
 
 controller.spawn({
