@@ -5,7 +5,8 @@ casbot-dev:
   environment:
     - NODE_ENV development 
   env_file: .env
-
+  links:
+    - redis-dev:redis
 
 casbot-prod:
   image: audibleblink/casbot2016:latest
@@ -15,3 +16,18 @@ casbot-prod:
   environment:
     - NODE_ENV production
   env_file: .env
+  links:
+    - redis-dev:redis
+
+
+redis-dev:
+  image: redis:latest
+  volumes:
+    - "/tmp:/data"
+  command: "redis-server --loglevel verbose"
+
+redis-prod:
+  image: redis:latest
+  volumes:
+    - "/data"
+  command: "redis-server"
