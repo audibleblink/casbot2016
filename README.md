@@ -36,10 +36,9 @@ Run `docker ps` to see the exposed port number.
 ## Deployment
  The bot currently lives on a Digital Ocean droplet and is deployed with Docker using a similar command to the one above.
  
- On the droplet, ensure the `.env` is present and populated, then:
+ On the droplet, ensure the `.env` is present and populated, then from within the cloned repo:
  
  ```sh
- docker-compose build casbot-prod
  docker-compose up casbot-prod
  ```
  
