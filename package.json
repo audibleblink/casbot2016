@@ -5,7 +5,7 @@
   "main": "bot.js",
   "scripts": {
     "test": "npm test",
-    "start": "node --harmony_destructuring bot.js"
+    "start": "node --harmony_destructuring --harmony_default_parameters bot.js"
   },
   "repository": {
     "type": "git",
@@ -28,6 +28,7 @@
   "dependencies": {
     "botkit": "0.0.4",
     "node-xbox": "^0.1.0",
+    "redis": "^2.4.2",
     "request": "^2.67.0",
     "urban": "^0.3.0"
   }
