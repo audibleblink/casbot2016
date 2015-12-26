@@ -14,9 +14,6 @@ controller.spawn({
   token: process.env.SLACK_TOKEN
 }).startRTM()
 
-// sets up admin tools/listeners
-require('./lib/admin_listeners')(controller)
-
 controller.setupWebserver(5000, (err, express_webserver) => {
   controller.createWebhookEndpoints(express_webserver)
 })
@@ -58,6 +55,10 @@ controller.hears('!live', 'ambient', (bot, message) => {
 
 
 ////////////////////////////////////////////////////////////
+
+// sets up admin tools/listeners
+require('./lib/admin_listeners')(controller)
+
 // message logging; no output; must be last
 controller.hears('.*', 'ambient', (bot, message) => {
   controller.storage.messages.save(message)
