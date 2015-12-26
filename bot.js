@@ -1,4 +1,4 @@
-"use strict"
+'use strict'
 
 const Botkit     = require('botkit')
 const mongoStore = require('./lib/mongo_storage')
@@ -6,7 +6,7 @@ const { parsedUptime, stripKeyword } = require('./lib/bot_tools')
 const { imageSearch, urban, XBL }    = require('./lib/bot_plugins')
 
 const controller = Botkit.slackbot({
-  debug: process.env.NODE_ENV === "development",
+  debug: process.env.NODE_ENV === 'development',
   storage: new mongoStore({host: 'mongodb'})
 })
 
@@ -20,7 +20,7 @@ controller.setupWebserver(5000, (err, express_webserver) => {
 
 
 // image search
-controller.hears("^!(img |gif )", 'ambient', (bot, message) => {
+controller.hears('^!(img |gif )', 'ambient', (bot, message) => {
   const query   = stripKeyword(message)
   const keyword = message.text.match(/^.{4}/)[0]
   imageSearch( keyword === '!gif' ? `gif ${query}` : query )
@@ -29,7 +29,7 @@ controller.hears("^!(img |gif )", 'ambient', (bot, message) => {
 })
 
 // urban dictionary search
-controller.hears('!urban', 'ambient', (bot, message) => {
+controller.hears('^!urban', 'ambient', (bot, message) => {
   const query = stripKeyword(message)
   urban(query)
     .then((link) => bot.reply(message, link))
@@ -37,12 +37,12 @@ controller.hears('!urban', 'ambient', (bot, message) => {
 })
 
 // used for checking status
-controller.hears('!ping', 'ambient', (bot, message) => {
+controller.hears('^!ping', 'ambient', (bot, message) => {
   bot.reply(message, `Pong!\n\`Uptime: ${parsedUptime(process.uptime())}\``)
 })
 
 // xbox live status checker
-controller.hears('!live', 'ambient', (bot, message) => {
+controller.hears('^!live', 'ambient', (bot, message) => {
   const gamertag = stripKeyword(message)
   XBL.getXuid(gamertag)
       .then(XBL.getPresence)
