@@ -21,7 +21,7 @@ controller.setupWebserver(5000, (err,express_webserver) => {
 
 // image search
 
-controller.hears('^!img\s|^!gif\s', 'ambient', (bot, message) => {
+controller.hears("^!(img |gif )", 'ambient', (bot, message) => {
   const query   = stripKeyword(message)
   const keyword = message.text.match(/^.{4}/)[0]
   imageSearch( keyword === '!gif' ? `gif ${query}` : query )
