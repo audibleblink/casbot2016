@@ -2,7 +2,6 @@
 
 const Botkit     = require('botkit')
 const mongoStore = require('./lib/mongo_storage')
-const adminTools = require('./lib/admin_listeners')
 const { parsedUptime, stripKeyword } = require('./lib/bot_tools')
 const { imageSearch, urban, XBL }    = require('./lib/bot_plugins')
 
@@ -15,11 +14,13 @@ controller.spawn({
   token: process.env.SLACK_TOKEN
 }).startRTM()
 
+// sets up admin tools/listeners
+require('./lib/admin_listeners')(controller)
+
 controller.setupWebserver(5000, (err, express_webserver) => {
   controller.createWebhookEndpoints(express_webserver)
 })
 
-controller.on('rtm_open', () => adminTools(controller))
 
 // image search
 controller.hears("^!(img |gif )", 'ambient', (bot, message) => {
