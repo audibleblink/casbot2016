@@ -1,14 +1,14 @@
 "use strict"
 
-const Botkit      = require('botkit')
-const mongoStore  = require('./lib/mongo_storage')
+const Botkit     = require('botkit')
+const mongoStore = require('./lib/mongo_storage')
+const adminTools = require('./lib/admin_listeners')
 const { parsedUptime, stripKeyword } = require('./lib/bot_tools')
 const { imageSearch, urban, XBL }    = require('./lib/bot_plugins')
 
-
 const controller = Botkit.slackbot({
   debug: process.env.NODE_ENV === "development",
-  storage: new mongoStore({host: 'mongodb'}) 
+  storage: new mongoStore({host: 'mongodb'})
 })
 
 controller.spawn({
@@ -19,8 +19,10 @@ controller.setupWebserver(5000, (err, express_webserver) => {
   controller.createWebhookEndpoints(express_webserver)
 })
 
+controller.on('rtm_open', () => adminTools(controller))
+
 // image search
-controller.hears('^!img\W|^!gif\W', 'ambient', (bot, message) => {
+controller.hears('^!img\s|^!gif\s', 'ambient', (bot, message) => {
   const query   = stripKeyword(message)
   const keyword = message.text.match(/^.{4}/)[0]
   imageSearch( keyword === '!gif' ? `gif ${query}` : query )
@@ -49,4 +51,13 @@ controller.hears('!live', 'ambient', (bot, message) => {
       .then((presence) => XBL.prepareResponse(presence, gamertag))
       .then((response) => bot.reply(message, response))
       .catch((err) => bot.reply(message, new Error(err)))
+})
+
+
+
+
+////////////////////////////////////////////////////////////
+// message logging; no output; must be last
+controller.hears('.*', 'ambient', (bot, message) => {
+  controller.storage.messages.save(message)
 })
