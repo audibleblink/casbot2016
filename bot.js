@@ -1,22 +1,21 @@
 "use strict"
 
 const Botkit      = require('botkit')
-const redisStore  = require('./lib/redis_storage')
+const mongoStore  = require('./lib/mongo_storage')
 const { parsedUptime, stripKeyword } = require('./lib/bot_tools')
 const { imageSearch, urban, XBL }    = require('./lib/bot_plugins')
 
 
 const controller = Botkit.slackbot({
   debug: process.env.NODE_ENV === "development",
-  // 'redis' is a hostname set in /etc/hosts by Docker
-  storage: new redisStore({host: "redis"}) 
+  storage: new mongoStore({host: 'mongodb'}) 
 })
 
 controller.spawn({
   token: process.env.SLACK_TOKEN
 }).startRTM()
 
-controller.setupWebserver(5000, (err,express_webserver) => {
+controller.setupWebserver(5000, (err, express_webserver) => {
   controller.createWebhookEndpoints(express_webserver)
 })
 
