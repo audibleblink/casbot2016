@@ -1,13 +1,22 @@
+# development configuration
 casbot-dev:
   build: .
   ports:
     - "5000:5000"
   environment:
-    - NODE_ENV development 
+    - NODE_ENV development
   env_file: .env
   links:
-    - redis-dev:redis
+    - "devdb:mongodb"
 
+
+devdb:
+    image: mongo:latest
+    volumes:
+      - "/tmp/mongo:/data/db"
+      
+      
+# production configuration
 casbot-prod:
   image: audibleblink/casbot2016:latest
   restart: always
@@ -17,17 +26,10 @@ casbot-prod:
     - NODE_ENV production
   env_file: .env
   links:
-    - redis-dev:redis
+    - proddb:mongodb
 
 
-redis-dev:
-  image: redis:latest
-  volumes:
-    - "/tmp:/data"
-  command: "redis-server --loglevel verbose"
-
-redis-prod:
-  image: redis:latest
-  volumes:
-    - "/data"
-  command: "redis-server"
+proddb:
+    image: mongo:latest
+    volumes:
+      - "/data/mongo/:/data/db"
