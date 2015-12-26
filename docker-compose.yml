@@ -6,6 +6,9 @@ casbot-dev:
   environment:
     - NODE_ENV development
   env_file: .env
+  dockerfile: Dockerfile.development
+  volumes:
+    - ".:/app"
   links:
     - "devdb:mongodb"
 
