@@ -55,11 +55,11 @@ controller.hears('^!live', 'ambient', (bot, message) => {
 
 
 ////////////////////////////////////////////////////////////
-
 // sets up admin tools/listeners
 require('./lib/admin_listeners')(controller)
 
 // message logging; no output; must be last
 controller.hears('.*', 'ambient', (bot, message) => {
+  if (message.channel[0] === "G") return // don't log messages from private rooms
   controller.storage.messages.save(message)
 })
