@@ -3,7 +3,7 @@
 const Botkit     = require('botkit')
 const mongoStore = require('./lib/mongo_storage')
 const { parsedUptime, stripKeyword, prettyJson } = require('./lib/bot_tools')
-const { imageSearch, urban, XBL, seen }    = require('./lib/bot_plugins')
+const { imageSearch, urban, liveStatus, seen }   = require('./lib/bot_plugins')
 
 const controller = Botkit.slackbot({
   debug: process.env.NODE_ENV === 'development',
@@ -44,9 +44,7 @@ controller.hears('^!ping', 'ambient', (bot, message) => {
 // xbox live status checker
 controller.hears('^!live', 'ambient', (bot, message) => {
   const gamertag = stripKeyword(message)
-  XBL.getXuid(gamertag)
-    .then(XBL.getPresence)
-    .then((presence) => XBL.prepareResponse(presence, gamertag))
+  liveStatus(gamertag)
     .then((response) => bot.reply(message, response))
     .catch((err) => bot.reply(message, err))
 })
@@ -55,11 +53,10 @@ controller.hears('^!live', 'ambient', (bot, message) => {
 controller.hears('^!seen', 'ambient', (bot, message) => {
   const query = stripKeyword(message)
   seen(controller, query)
-    .then((res) => {
-      console.log(res);
-      bot.reply(message, res)
-    })
+    .then((res) => bot.reply(message, res))
 })
+
+
 
 
 ////////////////////////////////////////////////////////////
