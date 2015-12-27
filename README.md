@@ -13,11 +13,14 @@ From Slack
 !urban word
 // returns a definition from urban dictionary
 
-!img word
-// return an image based on your search term
+!img|!gif word
+// returns an image based on your search term
 
 !ping
-// return "Pong!"; mainly for testing
+// returns "Pong!" and bot uptime; mainly for testing
+
+!seen username
+// returns the last time a person was seen on Slack and their last message
 ```
 
 ## Development
@@ -28,8 +31,16 @@ Either clone this directory and run it with `npm start` or if you have Docker in
 
 ```sh
 docker-compose build casbot-dev
-docker-compose up casbot-dev
+docker-compose up casbot-dev #ensures both casbot and mongodb containers are started
+
+# subsequent starts (that is, if the mongodb container is still running) are probably better to start with:
+docker-compose run --rm casbot-dev
+# This ensure the container is deleted after it's stopped
 ```
+
+One only has to build once since `casbot-dev` builds the development Dockerfile, which mounts this directory to the container so changes on one's local machine are reflected in the container.
+
+
 
 Run `docker ps` to see the exposed port number.
 

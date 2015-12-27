@@ -2,7 +2,7 @@
 
 const Botkit     = require('botkit')
 const mongoStore = require('./lib/mongo_storage')
-const { parsedUptime, stripKeyword } = require('./lib/bot_tools')
+const { parsedUptime, stripKeyword, prettyJson } = require('./lib/bot_tools')
 const { imageSearch, urban, XBL }    = require('./lib/bot_plugins')
 
 const controller = Botkit.slackbot({
@@ -51,7 +51,25 @@ controller.hears('^!live', 'ambient', (bot, message) => {
       .catch((err) => bot.reply(message, new Error(err)))
 })
 
-
+// returns last activity for a user
+controller.hears('^!seen', 'ambient', (bot, message) => {
+  const query = stripKeyword(message)
+  let response = {}
+  controller.storage.users.where({name: query})
+    .then((user) => controller.storage.messages.where({user: user[0].id}))
+    .then((messages) => {
+      let lastMessage  = messages.slice(-1)[0]
+      response.user    = query
+      response.message = lastMessage.text
+      response.time    = lastMessage.ts
+      return lastMessage.channel
+    })
+    .then((id) => controller.storage.channels.where({id}))
+    .then((channel) => {
+      response.channel = channel[0].name
+      bot.reply(message, prettyJson(response))
+    })
+})
 
 
 ////////////////////////////////////////////////////////////
