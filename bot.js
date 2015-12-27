@@ -3,7 +3,7 @@
 const Botkit     = require('botkit')
 const mongoStore = require('./lib/mongo_storage')
 const { parsedUptime, stripKeyword, prettyJson } = require('./lib/bot_tools')
-const { imageSearch, urban, XBL }    = require('./lib/bot_plugins')
+const { imageSearch, urban, XBL, seen }    = require('./lib/bot_plugins')
 
 const controller = Botkit.slackbot({
   debug: process.env.NODE_ENV === 'development',
@@ -45,29 +45,19 @@ controller.hears('^!ping', 'ambient', (bot, message) => {
 controller.hears('^!live', 'ambient', (bot, message) => {
   const gamertag = stripKeyword(message)
   XBL.getXuid(gamertag)
-      .then(XBL.getPresence)
-      .then((presence) => XBL.prepareResponse(presence, gamertag))
-      .then((response) => bot.reply(message, response))
-      .catch((err) => bot.reply(message, new Error(err)))
+    .then(XBL.getPresence)
+    .then((presence) => XBL.prepareResponse(presence, gamertag))
+    .then((response) => bot.reply(message, response))
+    .catch((err) => bot.reply(message, err))
 })
 
 // returns last activity for a user
 controller.hears('^!seen', 'ambient', (bot, message) => {
   const query = stripKeyword(message)
-  let response = {}
-  controller.storage.users.where({name: query})
-    .then((user) => controller.storage.messages.where({user: user[0].id}))
-    .then((messages) => {
-      let lastMessage  = messages.slice(-1)[0]
-      response.user    = query
-      response.message = lastMessage.text
-      response.time    = lastMessage.ts
-      return lastMessage.channel
-    })
-    .then((id) => controller.storage.channels.where({id}))
-    .then((channel) => {
-      response.channel = channel[0].name
-      bot.reply(message, prettyJson(response))
+  seen(controller, query)
+    .then((res) => {
+      console.log(res);
+      bot.reply(message, res)
     })
 })
 
