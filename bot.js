@@ -8,7 +8,7 @@ const { imageSearch, urban, liveStatus, seen } = require('./lib/bot_plugins')
 
 const controller = Botkit.slackbot({
   debug: process.env.NODE_ENV === 'development',
-  Storage: new MongoStore({host: 'mongodb'})
+  storage: new MongoStore({host: 'mongodb'})
 })
 
 controller.spawn({
@@ -68,5 +68,5 @@ require('./lib/admin_listeners')(controller)
 // message logging; no output; must be last
 controller.hears('.*', 'ambient', (bot, message) => {
   if (message.channel[0] === 'G') return // don't log messages from private rooms
-  controller.Storage.messages.save(message)
+  controller.storage.messages.save(message)
 })
