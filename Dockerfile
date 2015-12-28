@@ -1,4 +1,4 @@
-FROM node:5.3.0-wheezy
+FROM node:4.2.4-wheezy
 MAINTAINER Alex Flores <me@alexflor.es>
 
 ADD . /app
