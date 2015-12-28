@@ -1,13 +1,13 @@
 'use strict'
 
-const Botkit     = require('botkit')
-const mongoStore = require('./lib/mongo_storage')
-const { parsedUptime, stripKeyword, prettyJson } = require('./lib/bot_tools')
-const { imageSearch, urban, liveStatus, seen }   = require('./lib/bot_plugins')
+const Botkit = require('botkit')
+const MongoStore = require('./lib/mongo_storage')
+const { parsedUptime, stripKeyword } = require('./lib/bot_tools')
+const { imageSearch, urban, liveStatus, seen } = require('./lib/bot_plugins')
 
 const controller = Botkit.slackbot({
   debug: process.env.NODE_ENV === 'development',
-  storage: new mongoStore({host: 'mongodb'})
+  Storage: new MongoStore({host: 'mongodb'})
 })
 
 controller.spawn({
@@ -18,12 +18,11 @@ controller.setupWebserver(5000, (err, express_webserver) => {
   controller.createWebhookEndpoints(express_webserver)
 })
 
-
 // image search
 controller.hears('^!(img |gif )', 'ambient', (bot, message) => {
-  const query   = stripKeyword(message)
+  const query = stripKeyword(message)
   const keyword = message.text.match(/^.{4}/)[0]
-  imageSearch( keyword === '!gif' ? `gif ${query}` : query )
+  imageSearch(keyword === '!gif' ? `gif ${query}` : query)
     .then((link) => bot.reply(message, link))
     .catch((err) => bot.reply(message, err))
 })
@@ -59,12 +58,11 @@ controller.hears('^!seen', 'ambient', (bot, message) => {
 
 
 
-////////////////////////////////////////////////////////////
 // sets up admin tools/listeners
 require('./lib/admin_listeners')(controller)
 
 // message logging; no output; must be last
 controller.hears('.*', 'ambient', (bot, message) => {
-  if (message.channel[0] === "G") return // don't log messages from private rooms
-  controller.storage.messages.save(message)
+  if (message.channel[0] === 'G') return // don't log messages from private rooms
+  controller.Storage.messages.save(message)
 })
