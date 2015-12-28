@@ -1,8 +1,9 @@
 'use strict'
 
-const Botkit = require('botkit')
+const Botkit     = require('botkit')
 const MongoStore = require('./lib/mongo_storage')
-const { parsedUptime, stripKeyword } = require('./lib/bot_tools')
+
+const { parsedUptime, stripKeyword }           = require('./lib/bot_tools')
 const { imageSearch, urban, liveStatus, seen } = require('./lib/bot_plugins')
 
 const controller = Botkit.slackbot({
@@ -15,6 +16,7 @@ controller.spawn({
 }).startRTM()
 
 controller.setupWebserver(5000, (err, express_webserver) => {
+  if (err) throw err
   controller.createWebhookEndpoints(express_webserver)
 })
 
@@ -58,6 +60,8 @@ controller.hears('^!seen', 'ambient', (bot, message) => {
 
 
 
+
+// //////////////////////////////////////////////////
 // sets up admin tools/listeners
 require('./lib/admin_listeners')(controller)
 

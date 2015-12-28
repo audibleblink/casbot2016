@@ -1,0 +1,13 @@
+{
+  "extends": "standard",
+  
+  "env": {
+		"node": true,
+		"es6": true
+	},
+  
+  "rules": {
+    "no-multiple-empty-lines": 0,
+    "no-multi-spaces": 0,
+  }
+}
