@@ -3,7 +3,7 @@
 const Botkit     = require('botkit')
 const MongoStore = require('./lib/mongo_storage')
 
-const { parsedUptime, stripKeyword }           = require('./lib/bot_tools')
+const { parsedUptime } = require('./lib/bot_tools')
 const { imageSearch, urban, liveStatus, seen } = require('./lib/bot_plugins')
 
 const controller = Botkit.slackbot({
@@ -21,17 +21,17 @@ controller.setupWebserver(5000, (err, express_webserver) => {
 })
 
 // image search
-controller.hears('^!(img |gif )', 'ambient', (bot, message) => {
-  const query = stripKeyword(message)
-  const keyword = message.text.match(/^.{4}/)[0]
-  imageSearch(keyword === '!gif' ? `gif ${query}` : query)
+controller.hears('^!(img|gif)(.*)', 'ambient', (bot, message) => {
+  const keyword = message.match[1]
+  const query   = message.match[2]
+  imageSearch(keyword === 'gif' ? `gif ${query}` : query)
     .then((link) => bot.reply(message, link))
     .catch((err) => bot.reply(message, err))
 })
 
 // urban dictionary search
-controller.hears('^!urban', 'ambient', (bot, message) => {
-  const query = stripKeyword(message)
+controller.hears('^!urban (.*)', 'ambient', (bot, message) => {
+  const query = message.match[1]
   urban(query)
     .then((link) => bot.reply(message, link))
     .catch((err) => bot.reply(message, err))
@@ -43,16 +43,16 @@ controller.hears('^!ping', 'ambient', (bot, message) => {
 })
 
 // xbox live status checker
-controller.hears('^!live', 'ambient', (bot, message) => {
-  const gamertag = stripKeyword(message)
+controller.hears('^!live (.*)', 'ambient', (bot, message) => {
+  const gamertag = message.match[1]
   liveStatus(gamertag)
     .then((response) => bot.reply(message, response))
     .catch((err) => bot.reply(message, err))
 })
 
 // returns last activity for a user
-controller.hears('^!seen', 'ambient', (bot, message) => {
-  const query = stripKeyword(message)
+controller.hears('^!seen (.*)', 'ambient', (bot, message) => {
+  const query = message.match[1]
   seen(controller, query)
     .then((res) => bot.reply(message, res))
 })
