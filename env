@@ -1,9 +1,8 @@
 # Needed for the image/gif search
-GOOGLE_CX=
-GOOGLE_TOKEN=
+IMGUR_TOKEN=
 
 # your token from xboxapi.com. Used for the !live command
 XBOX_API=
 
-# Slack Bot token. 
+# Slack Bot token.
 SLACK_TOKEN=
